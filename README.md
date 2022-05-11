@@ -4,6 +4,8 @@ A blog website to create and comment on blog posts from tech developers
 
 ## Description
 
+This CMS-style blog site allows developers who write about tech to publish articles, blog posts, and their thoughts and opinions on other posts.
+
 ## Installation
 
 ## Usage
