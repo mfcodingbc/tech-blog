@@ -8,6 +8,8 @@ This CMS-style blog site allows developers who write about tech to publish artic
 
 ## Installation
 
+Check out the Tech Blog Site [here](link).
+
 ## Usage
 
 ## Technologies Used

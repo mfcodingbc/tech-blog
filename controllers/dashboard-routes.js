@@ -12,10 +12,15 @@ router.get('/', withAuth, (req, res) => {
     },
     attributes: [
       'id',
-      'post_url',
+      'content',
       'title',
       'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
+      [
+        sequelize.literal(
+          '(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'
+        ),
+        'vote_count'
+      ]
     ],
     include: [
       {
@@ -32,12 +37,12 @@ router.get('/', withAuth, (req, res) => {
       }
     ]
   })
-    .then(dbPostData => {
+    .then((dbPostData) => {
       // serialize data before passing to template
-      const posts = dbPostData.map(post => post.get({ plain: true }));
+      const posts = dbPostData.map((post) => post.get({ plain: true }));
       res.render('dashboard', { posts, loggedIn: true });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
@@ -47,10 +52,15 @@ router.get('/edit/:id', withAuth, (req, res) => {
   Post.findByPk(req.params.id, {
     attributes: [
       'id',
-      'post_url',
+      'content',
       'title',
       'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
+      [
+        sequelize.literal(
+          '(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'
+        ),
+        'vote_count'
+      ]
     ],
     include: [
       {
@@ -67,7 +77,7 @@ router.get('/edit/:id', withAuth, (req, res) => {
       }
     ]
   })
-    .then(dbPostData => {
+    .then((dbPostData) => {
       if (!dbPostData) {
         res.status(404).json({ message: 'No post found with this id' });
         return;
@@ -82,9 +92,9 @@ router.get('/edit/:id', withAuth, (req, res) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json(err);
     });
-})
+});
 
 module.exports = router;

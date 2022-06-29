@@ -10,10 +10,15 @@ router.get('/', (req, res) => {
   Post.findAll({
     attributes: [
       'id',
-      'post_url',
+      'content',
       'title',
       'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
+      [
+        sequelize.literal(
+          '(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'
+        ),
+        'vote_count'
+      ]
     ],
     include: [
       {
@@ -30,14 +35,14 @@ router.get('/', (req, res) => {
       }
     ]
   })
-    .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({ plain: true }))
+    .then((dbPostData) => {
+      const posts = dbPostData.map((post) => post.get({ plain: true }));
       res.render('homepage', {
         posts,
         loggedIn: req.session.loggedIn
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
@@ -52,6 +57,15 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
+// Signup Page render
+router.get('/signup', (req, res) => {
+  if (req.session.loggedIn) {
+    res.redirect('/');
+    return;
+  }
+  res.render('signup');
+});
+
 // Post Page render
 router.get('/post/:id', (req, res) => {
   Post.findOne({
@@ -60,10 +74,15 @@ router.get('/post/:id', (req, res) => {
     },
     attributes: [
       'id',
-      'post_url',
+      'content',
       'title',
       'created_at',
-      [sequelize.literal('(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'), 'vote_count']
+      [
+        sequelize.literal(
+          '(SELECT COUNT(*) FROM vote WHERE post.id = vote.post_id)'
+        ),
+        'vote_count'
+      ]
     ],
     include: [
       {
@@ -80,7 +99,7 @@ router.get('/post/:id', (req, res) => {
       }
     ]
   })
-    .then(dbPostData => {
+    .then((dbPostData) => {
       if (!dbPostData) {
         res.status(404).json({ message: 'No post found with this id' });
         return;
@@ -95,7 +114,7 @@ router.get('/post/:id', (req, res) => {
         loggedIn: req.session.loggedIn
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
